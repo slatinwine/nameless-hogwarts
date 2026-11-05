@@ -48,6 +48,12 @@
     display:none;
   }
   #visitbar b{color:var(--accent);font-weight:600;margin:0 2px;}
+  #visitfoot{
+    margin-top:22px;padding-top:14px;border-top:1px solid var(--line);
+    text-align:center;font-size:12px;color:var(--ink-dim);letter-spacing:.08em;
+    display:none;
+  }
+  #visitfoot b{color:var(--accent);font-weight:600;margin:0 2px;}
   #stats{
     display:flex;flex-wrap:wrap;gap:14px 22px;
     margin-top:14px;font-size:13px;color:var(--ink-dim);
@@ -187,6 +193,7 @@
     <button onclick="toggleHistory()">旅程记录</button>
     <button onclick="restart()">重新开始</button>
   </div>
+  <div id="visitfoot"></div>
 </div>
 
 <script>
@@ -1015,12 +1022,19 @@ function toggleHistory(){
   try{
     fetch('/api/visits').then(r=>{ if(!r.ok) throw 0; return r.json(); }).then(d=>{
       if(!d||!d.ok) return;
-      const bar=document.getElementById('visitbar');
-      let txt = d.firstVisit ? '你是第 <b>'+d.total+'</b> 位踏入这条时间线的巫师'
-                             : '已有 <b>'+d.total+'</b> 位巫师踏入这条时间线';
-      if(d.today) txt += ' · 今日 <b>'+d.today+'</b> 人';
-      bar.innerHTML = txt + '（按 IP 去重，原始地址不落盘）';
-      bar.style.display='block';
+      const render=(elId,center)=>{
+        const el=document.getElementById(elId);
+        if(!el) return;
+        let txt = d.firstVisit ? '你是第 <b>'+d.total+'</b> 位踏入这条时间线的巫师'
+                               : '已有 <b>'+d.total+'</b> 位巫师踏入这条时间线';
+        if(d.today) txt += ' · 今日 <b>'+d.today+'</b> 人';
+        if(!center) txt += '（按 IP 去重，原始地址不落盘）';
+        else txt = '✦ ' + txt + ' ✦';
+        el.innerHTML = txt;
+        el.style.display='block';
+      };
+      render('visitbar', false);
+      render('visitfoot', true);
     }).catch(()=>{});
   }catch(e){}
 })();
