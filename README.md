@@ -42,3 +42,7 @@ hogwarts-game/
 ├── assets/         # 场景插画
 └── docs/           # GitHub Pages 跳转页（指向正式入口）
 ```
+
+## 关注公众号
+
+![公众号二维码](qrcode.jpg)
